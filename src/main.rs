@@ -1,18 +1,23 @@
-use clap::{command, Arg, ArgMatches};
+// use bitcoincore_rpc::{Auth, Client, RpcApi};
+use clap::Parser;
+
+/// A mini rust app to illustrate HD wallets
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    /// Generate new wallet
+    #[arg(short, long, default_value_t = true)]
+    wallet: bool,
+
+    /// create new address
+    #[arg(short, long, default_value_t = true)]
+    address: bool,
+}
 
 fn main() {
-    let match_results: ArgMatches = command!().about("This a simply a rust app to help us understand HD wallets by making use of a JSON RPC client to make calls to a bitcoin core backend.")
-        .arg(
-            Arg::new("wallet")
-                .long("wallet")
-                .help("wallet specific commands")
-                .aliases(["Wallet", "wlet"]),
-        )
-        .arg(
-            Arg::new("address")
-                .long("address")
-                .help("address specific commands")
-                .aliases(["add", "Address"]),
-        )
-        .get_matches();
+    let args: Args = Args::parse();
+
+    if args.wallet {
+        println!("creating new wallet")
+    }
 }
