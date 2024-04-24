@@ -1,46 +1,40 @@
 pub mod client;
 pub mod wallet;
 
-use wallet::create_wallet;
-use client::init::init_client;
+use clap::Parser;
+use wallet::{create_wallet, get_wallet_data};
 
-use clap::{Parser, Subcommand};
-
-
-
-/// A mini rust app to illustrate HD wallets
 #[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
+#[command(version,author="Abba Adamu", about="A mini rust app to illustrate HD wallets", long_about = None)]
 struct Args {
     /// wallet commands
     #[arg(short, long, default_value_t = true)]
     wallet: bool,
 
-    /// address commands
+    /// create new wallet
     #[arg(short, long, default_value_t = true)]
-    address: bool,
+    create: bool,
 
-    #[command(subcommand)]
-    sub_commands: Option<SubCommands>,
+    /// name of new wallet
+    #[arg(short, long)]
+    name: String,
+
+    /// fetch wallet information
+    #[arg(short, long)]
+    get_info: Option<String>,
 }
 
-
-#[derive(Subcommand,Debug)]
-enum SubCommands {
-    /// creates a new instance
-    Create {
-        /// name of wallet or address
-        #[arg(short, long, default_value_t = String::from("my_first_btc_wallet"))]
-        name:String
-    }
-    }
-    
-
-
 fn main() {
-    let args: Args = Args::parse();
+    let args = Args::parse();
 
-    if args.wallet {
-       create_wallet(init_client(None))
+    let Args {
+        wallet,
+        create,
+        name,
+        get_info,
+    } = args;
+
+    if wallet && create && !name.is_empty() {
+        create_wallet(name)
     }
 }

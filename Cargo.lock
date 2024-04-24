@@ -355,6 +355,7 @@ version = "0.1.0"
 dependencies = [
  "bitcoincore-rpc",
  "clap",
+ "serde_json",
 ]
 
 [[package]]
