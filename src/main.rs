@@ -21,7 +21,7 @@ struct Args {
 
     /// fetch wallet information
     #[arg(short, long)]
-    get_info: Option<String>,
+    get_info: Option<bool>,
 }
 
 fn main() {
@@ -34,7 +34,9 @@ fn main() {
         get_info,
     } = args;
 
-    if wallet && create && !name.is_empty() {
-        create_wallet(name)
+    if wallet && create {
+        create_wallet(name.clone())
+    } else if get_info.is_some() {
+        get_wallet_data(name.clone())
     }
 }
